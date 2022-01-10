@@ -7,3 +7,5 @@
 ## Convert code to use node
 
 ## Work Thru multiplayer Socket IO
+
+Currently trying to get socket working from Azure
