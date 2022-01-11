@@ -4,7 +4,7 @@
   "description": "This is a Node Application to Convert the Sibling Game into a Node Application.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -30,5 +30,8 @@
     "express-session": "^1.17.2",
     "path": "^0.12.7",
     "socket.io": "^4.4.1"
+  },
+  "devDependencies": {
+    "mocha": "^9.1.3"
   }
 }
