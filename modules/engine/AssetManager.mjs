@@ -40,7 +40,3 @@ export class AssetManager {
         return this.cache[path];
     }
 };
-
-/*  
-const _AssetManager = new AssetManager();
-export { _AssetManager as AssetManager }; */

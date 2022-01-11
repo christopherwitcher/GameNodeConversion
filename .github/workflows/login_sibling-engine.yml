@@ -25,11 +25,10 @@ jobs:
         run: |
           npm install
           npm run build --if-present
-          npm run test --if-present
       
-      - name: npm run coverage
+      - name: npm run test
         run: |
-          npm run coverage
+          npm run test
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
