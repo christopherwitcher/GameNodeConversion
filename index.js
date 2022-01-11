@@ -1,9 +1,11 @@
-const express = require('express');
+//Import Modules
+import express from 'express';
+import * as http from 'http';
+import {Server} from 'socket.io';
+
 const app = express();
-const http = require('http');
 const server = http.createServer(app);
 const port = process.env.port || 8080;
-const {Server} = require("socket.io");
 const io = new Server(server);
 
 app.get('/', (req, res) => {
