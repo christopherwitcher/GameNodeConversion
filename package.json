@@ -4,7 +4,8 @@
   "description": "This is a Node Application to Convert the Sibling Game into a Node Application.",
   "main": "index.js",
   "scripts": {
-    "test": "nyc --reporter=text --all mocha ./tests/**/*.test.mjs"
+    "test": "nyc --reporter=text --check-coverage --lines 10 --all mocha ./tests/**/*.test.mjs",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",

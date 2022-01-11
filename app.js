@@ -1,4 +1,4 @@
-import {AssetManager} from './modules/engine/AssetManager.mjs' //Error can not use import statement outside a module #TODO change to module later
+import {AssetManager} from './modules/engine/AssetManager.js' //Error can not use import statement outside a module #TODO change to module later
 
 import * as http from 'http';
 import * as path from 'path';

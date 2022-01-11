@@ -1,35 +1,39 @@
 
 //Sets up different animation of runboy and initializes the controls
+import { BoundingBox } from '../modules/engine/BoundingBox.mjs';
 class Player extends Entity {
+    rewindStack = [];
+    jumping = false;
+    running = false;
+    runningJump = false;
+    standing = true;
+    falling = false;
+    canPass = true;
+    landed = false;
+    collission = false;
+    
+    rightStanding = new Animation(ASSET_MANAGER.getAsset(heroSpriteSheet), 12, 6, 100, 150, 0.01, 1, true, false);
+    leftStanding = new Animation(ASSET_MANAGER.getAsset(heroSpriteSheet), 0, 156, 100, 150, 0.01, 1, true, false);
+    runRight = new Animation(ASSET_MANAGER.getAsset(heroSpriteSheet), 100, 0, 100, 150, 0.011, 120, true, false);
+    runLeft = new Animation(ASSET_MANAGER.getAsset(heroSpriteSheet), 100, 160, 100, 150, 0.011, 120, true, false);
+    jumpRight = new Animation(ASSET_MANAGER.getAsset(heroSpriteSheet), 10, 325, 114, 158, .015, 89, false);
+    jumpLeft = new Animation(ASSET_MANAGER.getAsset(heroSpriteSheet), 10, 485, 114, 158, .015, 89, false);
+    fallRight = new Animation(ASSET_MANAGER.getAsset(heroSpriteSheet), 10146, 336, 114, 160, 0.01, 1, true);
+    fallLeft = new Animation(ASSET_MANAGER.getAsset(heroSpriteSheet), 10146, 496, 114, 148, 0.01, 1, true);
+    
+    //stores character's rewindStack
+    rewinding = false;
+    lastFrame = null;
+    rewindCount = 0;
+    rewindFrame = null;
     constructor(game, canvasWidth, worldWidth) {
-
-        this.rightStanding = new Animation(ASSET_MANAGER.getAsset(heroSpriteSheet), 12, 6, 100, 150, 0.01, 1, true, false);
-        this.leftStanding = new Animation(ASSET_MANAGER.getAsset(heroSpriteSheet), 0, 156, 100, 150, 0.01, 1, true, false);
-
-        this.runRight = new Animation(ASSET_MANAGER.getAsset(heroSpriteSheet), 100, 0, 100, 150, 0.011, 120, true, false);
-
-        this.runLeft = new Animation(ASSET_MANAGER.getAsset(heroSpriteSheet), 100, 160, 100, 150, 0.011, 120, true, false);
-
-        this.jumpRight = new Animation(ASSET_MANAGER.getAsset(heroSpriteSheet), 10, 325, 114, 158, .015, 89, false);
-        this.jumpLeft = new Animation(ASSET_MANAGER.getAsset(heroSpriteSheet), 10, 485, 114, 158, .015, 89, false);
-
-        this.fallRight = new Animation(ASSET_MANAGER.getAsset(heroSpriteSheet), 10146, 336, 114, 160, 0.01, 1, true);
-        this.fallLeft = new Animation(ASSET_MANAGER.getAsset(heroSpriteSheet), 10146, 496, 114, 148, 0.01, 1, true);
-        //End of Game Animation
-        this.rewindFrame = null;
-
+        super(game, canvasWidth, worldWidth);
+        
         // set the sprite's starting position on the canvas
         Entity.call(this, game, 0, startingHeight);
         //Entity.call(this, game, canvasWidth / 2, startingHeight);
-        this.jumping = false;
-        this.running = false;
-        this.runningJump = false;
-        this.standing = true;
-        this.falling = false;
-        this.canPass = true;
-        this.landed = false;
-        this.collission = false;
-
+        
+        this.game = game;
         this.height = 0;
         this.baseHeight = startingHeight;
         this.canvasWidth = canvasWidth;
@@ -45,14 +49,6 @@ class Player extends Entity {
         this.lastBottom = this.boundingbox.bottom;
         this.lastTop = this.boundingbox.top;
 
-        //stores character's rewindStack
-        this.myRewindStack = [];
-        this.rewinding = false;
-        this.game = game;
-        this.lastFrame = null;
-        // 5/28 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        this.rewindCount = 0;
-        // 5/28 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
     //The update method for run boy
     //has the controls for when he will run and jump and will move the player across the screen.
@@ -63,11 +59,10 @@ class Player extends Entity {
 
         // 5/28 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (this.rewinding === true) {
-
             this.boundingbox = new BoundingBox(this.lastFrame.canvasX, this.lastFrame.canvasY, this.boundingbox.width, this.boundingbox.height);
             return;
 
-        } else if (this.myRewindStack.length === 0 && this.rewindCount > 0) {
+        } else if (rewindStack.length === 0 && this.rewindCount > 0) {
             console.log("finish rewind");
             ///////////////////////////////////////////////
             var rwSound = document.getElementById('rewindSound');
@@ -387,6 +382,7 @@ class Player extends Entity {
             }
         }
     }
+
     moveRewind() {
         var canvasMidpoint = this.canvasWidth / 2;
 
@@ -406,7 +402,7 @@ class Player extends Entity {
         this.y = this.lastFrame.canvasY;
 
 
-        //if (this.myRewindStack.length === 1) {
+        //if (this.rewindStack.length === 1) {
         //    this.boundingbox = new BoundingBox(this.rewindFrame.x, this.rewindFrame.y,
         //        this.rewindFrame.width, this.rewindFrame.height);
         //}
@@ -424,7 +420,7 @@ class Player extends Entity {
 
         if (this.rewinding === true) {
             var canvasMidpoint = this.canvasWidth / 2;
-            if (this.myRewindStack.length === 0) {
+            if (this.rewindStack.length === 0) {
 
                 this.rewinding = false;
                 return;
@@ -506,11 +502,7 @@ class Player extends Entity {
         ctx.fillRect(1006, 26, (this.worldX / this.worldWidth) * 214, 8);
     }
     didICollide() {
-        //console.log("check if they collide");
-        //if (this.game.running === false) {
-        //    this.game.endGame();
-        //    return;
-        //}
+        
         this.canPass = true;
         this.landed = false;
         this.collission = false;
@@ -582,15 +574,15 @@ class Player extends Entity {
     rewindMe() {
         //this.spriteSheet = ;
         this.rewinding = true;
-        this.rewindFrame = new RewindAnimation(ASSET_MANAGER.getAsset(heroSpriteSheet), this.myRewindStack);
+        this.rewindFrame = new RewindAnimation(ASSET_MANAGER.getAsset(heroSpriteSheet), this.rewindStack);
         this.draw(this.game.ctx);
     }
     addRewindFrame(clipX, clipY, frameWidth, frameHeight) {
-        if (this.myRewindStack.length >= 600) {
-            this.myRewindStack.shift();
+        if (this.rewindStack.length >= 600) {
+            this.rewindStack.shift();
         }
-        var finalIndex = this.myRewindStack.length - 1;
-        var last = this.myRewindStack[finalIndex];
+        var finalIndex = this.rewindStack.length - 1;
+        var last = this.rewindStack[finalIndex];
         var current = {
             canvasX: Math.floor(this.x), canvasY: Math.floor(this.y), worldX: Math.floor(this.worldX), worldY: Math.floor(this.worldY),
             clipX: clipX, clipY: clipY,
@@ -599,7 +591,7 @@ class Player extends Entity {
             currentPlatform: this.currentPlatform
         };
         this.lastFrame = current;
-        this.myRewindStack.push(current);
+        this.rewindStack.push(current);
 
     }
 }

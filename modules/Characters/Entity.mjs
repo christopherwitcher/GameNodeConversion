@@ -1,4 +1,9 @@
 class Entity {
+    x = 0;
+    y = 0;
+    worldX = 0;
+    worldY = 0;
+    removeFromWorld = false;
     constructor(game, x, y) {
         this.game = game;
         this.x = x;
