@@ -1,4 +1,6 @@
-export class AssetManager {
+import {AssetManager} from '../modules/engine/AssetManager.mjs';
+import * as assert from 'assert';
+/*let AssetManager = class AssetManager {
     constructor() {
         this.successCount = 0;
         this.errorCount = 0;
@@ -40,7 +42,29 @@ export class AssetManager {
         return this.cache[path];
     }
 };
+ */
 
-/*  
-const _AssetManager = new AssetManager();
-export { _AssetManager as AssetManager }; */
+
+
+describe('AssetManager', () => {
+        describe('#isDone()', function () {
+            it('should return true', function () {
+              let assetManager = new AssetManager();
+              assert.equal(assetManager.isDone(), true);
+            });
+        });
+    });
+
+    
+
+describe('AssetManager', () => {
+    describe('#isDone()', function () {
+        it('should return false', function () {
+            let assetManager = new AssetManager();
+            assetManager.successCount = 2;
+
+          assert.equal(assetManager.isDone(), false);
+        });
+    });
+});
+
