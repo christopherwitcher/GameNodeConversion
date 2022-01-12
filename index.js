@@ -1,6 +1,7 @@
 //Import Modules
 import express from 'express';
 import * as http from 'http';
+import * as path from 'path';
 import {Server} from 'socket.io';
 
 const app = express();
@@ -9,7 +10,7 @@ const port = process.env.port || 8080;
 const io = new Server(server);
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(`${__dirname}/index.html`);
 });
 
 /* io.on('connection', (socket) => {
