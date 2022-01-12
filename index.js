@@ -12,6 +12,8 @@ const server = http.createServer(app);
 const port = process.env.port || 8080;
 const io = new Server(server);
 let homepage = __dirname + '/index.html';
+app.use(express.static(__dirname + '/public'));
+
 app.get('/', (req, res) => {
   res.sendFile(homepage);
 });
