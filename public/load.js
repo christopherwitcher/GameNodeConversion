@@ -57,7 +57,7 @@ socket.on('chat message', function (msg) {
 });
 
 socket.on('initialize', (msg) => {
-    console.log(msg.message);
+    console.log(msg.message + ' ' + socket.id);
 })
 
 var startGame = () => {

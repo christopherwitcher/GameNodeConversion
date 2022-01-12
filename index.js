@@ -5,6 +5,7 @@ import * as path from 'path';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import {Server} from 'socket.io';
+import { SocketAddress } from 'net';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -27,15 +28,16 @@ app.get('/', (req, res) => {
 }); */
 
 io.on('connection', (socket) => {
-    socket.on('chat message', (msg) => {
+    console.log('My Socket' + socket.id);
+  socket.on('chat message', (msg) => {
         console.log("message sent" + msg);
         io.emit('chat message', "Server Received Message to Start");
     });
 
     socket.on('initialize', (receiver) => {
-        console.log(receiver.firstName + ' ' + receiver.lastName);
-        let body = { message: "Initialized" };
-        io.emit('initialize', body);
+        console.log(receiver.firstName + ' ' + receiver.lastName + ' ' + socket.id);
+        let body = { message: 'Initialized ' + socket.id };
+        io.to(socket.id).emit('initialize', body);
     })
   });
 
