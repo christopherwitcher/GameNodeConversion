@@ -1,5 +1,6 @@
 //The game engine.
-class GameEngine {
+export class GameEngine {
+    timer;
     constructor() {
         this.entities = [];
         this.ctx = null;
@@ -50,6 +51,7 @@ class GameEngine {
         this.draw();
 
     }
+    
     playSounds(audioElement) {
 
         for (a = 0; a < this.audiochannels.length; a++) {

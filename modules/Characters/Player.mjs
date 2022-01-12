@@ -1,7 +1,9 @@
 
 //Sets up different animation of runboy and initializes the controls
+import { Entity } from '../modules/engine/Entity.mjs'
 import { BoundingBox } from '../modules/engine/BoundingBox.mjs';
-class Player extends Entity {
+
+export class Player extends Entity {
     rewindStack = [];
     jumping = false;
     running = false;

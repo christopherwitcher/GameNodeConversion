@@ -1,14 +1,40 @@
+// import { GameEngine } from '../modules/engine/GameEngine.mjs'
+
 let heroSpriteSheet = '..img/runboySprite.png';
 let backImg = './img/neighBackgroundext.png';
 var gameEngine;
 
-var ASSET_MANAGER = new AssetManager();
+/* var ASSET_MANAGER = new AssetManager();
 ASSET_MANAGER.queueDownload(backImg);
 ASSET_MANAGER.queueDownload(heroSpriteSheet);
-window.onload = initialize;
-function initialize() {
+window.onload = initialize; */
+var socket = io("http://localhost:8080");
 
-    ASSET_MANAGER.downloadAll(function () {
+socket.on('chat message', function (msg) {
+    console.log(msg);
+});
+
+var startGame = () => {
+    console.log("Click Start Button");
+
+    socket.emit('chat message', "Start Button Clicked");
+    // initAudio();
+    // document.getElementById('bgSound').play();
+
+    // if (document.getElementById("startDisplay")) {
+    //     sdParentNode = document.getElementById("startDisplay").parentNode;
+    //     startDisplay = document.getElementById("startDisplay");
+    //     sdParentNode.removeChild(startDisplay);
+    // }
+    // gameEngine.start();
+    // gameEngine.ctx.canvas.focus();
+    // timer = new GameTimer(gameEngine);
+    // gameEngine.addEntity(timer);
+}
+/* 
+var initialize = () => {
+
+    ASSET_MANAGER.downloadAll(() => {
 
         var canvas = document.getElementById('world');
         canvas.setAttribute("tabindex", 0);
@@ -55,4 +81,19 @@ function initialize() {
         gameEngine.init(ctx);
         //gameEngine.addEntity(gameWorld);
     });
+} */
+
+window.requestAnimFrame = (() => {
+    return window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.oRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        function (/* function */ callback, /* DOMElement */ element) {
+            window.setTimeout(callback, 1000 / 60);
+        };
+})();
+
+window.onload = () => {
+    console.log("on load and initialize");
 }

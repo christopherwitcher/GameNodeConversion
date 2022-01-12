@@ -2,15 +2,18 @@
 import express from 'express';
 import * as http from 'http';
 import * as path from 'path';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 import {Server} from 'socket.io';
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
 const server = http.createServer(app);
 const port = process.env.port || 8080;
 const io = new Server(server);
-
+let homepage = __dirname + '/index.html';
 app.get('/', (req, res) => {
-  res.sendFile(`${__dirname}/index.html`);
+  res.sendFile(homepage);
 });
 
 /* io.on('connection', (socket) => {
@@ -23,7 +26,7 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
     socket.on('chat message', (msg) => {
         console.log("message sent" + msg);
-        io.emit('chat message', msg);
+        io.emit('chat message', "Server Received Message to Start");
     });
   });
 

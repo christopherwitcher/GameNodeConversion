@@ -29,7 +29,7 @@ window.requestAnimFrame = (function () {
             };
 })();
 
-/* //initializes the asset manager.
+//initializes the asset manager.
 function AssetManager() {
     this.successCount = 0;
     this.errorCount = 0;
@@ -854,6 +854,7 @@ var ASSET_MANAGER = new AssetManager();
 ASSET_MANAGER.queueDownload(backImg);
 ASSET_MANAGER.queueDownload(heroSpriteSheet);
 window.onload = initialize;
+
 function initialize() {
 
     ASSET_MANAGER.downloadAll(function () {
@@ -932,35 +933,7 @@ function initAudio() {
 }
 
 
-function Platform(game, the_x, the_y, canvasWidth, clipX, clipY, frameWidth, frameHeight) {
-    this.game = game;
-    this.worldX = the_x;
-    this.worldY = the_y;
-    this.width = frameWidth;
-    this.height = frameHeight;
-    this.canvasWidth = canvasWidth;
-    this.drawPlatform = new Animation(ASSET_MANAGER.getAsset(heroSpriteSheet), clipX, clipY, this.width, this.height, 0.01, 1, true);
-    this.boundingBox = new BoundingBox(this.worldX, this.worldY, this.width, this.height);
 
-
-    Entity.call(this, game, this.worldX, this.worldY);
-    //this.game.addEntity(this);
-}
-
-Platform.prototype = new Entity();
-Platform.prototype.constructor = Platform;
-
-Platform.prototype.update = function () {
-    this.boundingBox = new BoundingBox(this.x, this.y, this.width, this.height);
-    Entity.prototype.update.call(this);
-};
-
-Platform.prototype.draw = function (ctx) {
-
-    //ctx.strokeStyle = "red";
-    //ctx.strokeRect(this.boundingBox.x, this.boundingBox.y, this.boundingBox.width, this.boundingBox.height);
-    this.drawPlatform.drawFrame(this.game.clockTick, ctx, this.x, this.y);
-};
 
 function MovingPlatform(game, the_x, the_y, canvasWidth, clipX, clipY, frameWidth, frameHeight, range, speed) {
     this.game = game;
