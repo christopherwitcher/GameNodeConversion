@@ -20,12 +20,6 @@ app.get('/', (req, res) => {
   res.sendFile(homepage);
 });
 
-/* io.on('connection', (socket) => {
-    console.log('a user connected');
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-      });
-}); */
 
 io.on('connection', (socket) => {
     console.log('My Socket' + socket.id);

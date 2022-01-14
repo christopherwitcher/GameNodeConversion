@@ -1,0 +1,35 @@
+var sectOne = rectPlatform(game, startX, 0, 1, 8, false);
+    startX = startX + 50;
+    var sectTwo = rectPlatform(game, startX, 300, 4, 1, false);
+    startX = startX + 400;
+    var sectThree = rectPlatform(game, startX, 450, 4, 1, false);
+    var sectFour = rectPlatform(game, startX + 50, 150, 4, 1, false);
+    startX = startX + 375;
+    var sectFive = rectPlatform(game, startX, 275, 8, 1, false);
+    var enemyOne = new Enemy(game, startX, 135, false)
+    game.addEntity(enemyOne);
+    startX = startX + 50 * 7;
+    var sectSix = rectPlatform(game, startX, 125, 1, 10, false);
+    startX = startX + 50;
+    var sectSix = rectPlatform(game, startX, 125, 2, 1, false);
+    var sectEight = rectPlatform(game, startX, 325, 5, 1, false);
+    var zeroEnemy = new Enemy(game, startX + 100, 180, true);
+    game.addEntity(zeroEnemy);
+    startX = startX + 200;
+
+    var sectSeven = rectPlatform(game, startX, 125, 2, 1, false);
+
+    var stairOne = rightCrateSteps(game, startX + 450, 125, 9);
+    startX = startX + 900;
+    var sectTen = rectPlatform(game, startX + 150, 0, 4, 3, false);
+    startX = startX + 400;
+    rectPlatform(game, startX, 450, 4, 1, true);
+    startX = startX + 350;
+    rectPlatform(game, startX,325,4,1,true);
+    startX = startX + 350;
+    rectPlatform(game, startX, 200, 4, 1, true);
+    startX = startX + 400;
+    var lastBuilding = new Platform(game, startX, 100, canvasWidth, 900, 4400, 270, 580, 0.8);
+    game.addEntity(lastBuilding);
+    startX = startX + 450;
+    var sectEleven = rectPlatform(game, startX, -100, 4, 4, false);

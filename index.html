@@ -7,7 +7,7 @@
     <!-- <script src="node_modules/socket.io/socket.io.js"></script> -->
     <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
     
-    <script src="load.js"></script>
+    <script src="load.js" type="module"></script>
  
     <style type="text/css">
         .scoreBox {
@@ -101,8 +101,8 @@
         </div>
         <div style="position: absolute; left: 530px; top: 450px; z-index: 0;">
             <input id="startButton" type="button" value="Start Game"
-                style="display: inline-block; width: 200px; border: 1px solid red; background-color: #A5F1FF; color: red; font-size: 150%; border-radius: 5px; "
-                onclick="startGame();" />
+                style="display: inline-block; width: 200px; border: 1px solid red; background-color: #A5F1FF; color: red; font-size: 150%; border-radius: 5px; " />
+                
         </div>
         <div id="controls"
             style="position: absolute; left: 1050px; top: 450px; z-index: 0; border: 1px solid red; background-color: #A5F1FF; border-radius: 5px; color: red;">
