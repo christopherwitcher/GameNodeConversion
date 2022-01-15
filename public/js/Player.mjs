@@ -553,7 +553,7 @@ export class Player extends Entity {
                 this.collision = true;
 
                 //if (entity instanceof MovingPlatform) {
-                //    if (entity.myDirection) {
+                //    if (entity) {
                 //        this.moveDistance = entity.mySpeed;
                 //    }
                 //    else {

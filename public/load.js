@@ -68,6 +68,7 @@ window.onload = () => {
         window.gameEngine = new GameEngine(canvasWidth,ASSET_MANAGER.getAsset(heroSpriteSheet));
         var finishLine = new FinishLine(window.gameEngine, gameWorld.width, ctx, ASSET_MANAGER.getAsset(heroSpriteSheet));
         window.gameEngine.finishLine = finishLine;
+        window.direction = true;
         var the_player = new Player(window.gameEngine, canvasWidth, gameWorld.width, ASSET_MANAGER.getAsset(heroSpriteSheet));
         
         var nextWidth = 900;
