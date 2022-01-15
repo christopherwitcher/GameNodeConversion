@@ -1,11 +1,12 @@
 
 export class RewindAnimation {
-    constructor(spriteSheet, rewindStack) {
+    constructor(spriteSheet, rewindStack, canvasWidth) {
         this.spriteSheet = spriteSheet;
         this.myRewindStack = rewindStack;
         this.previousFrame = null;
         this.currentLineInterval = 0;
         this.movingUp = true;
+        this.canvasWidth = canvasWidth;
     }
     drawFrame(tick, ctx, scaleBy) {
 
@@ -33,7 +34,7 @@ export class RewindAnimation {
                 ctx.strokeStyle = "#000";
                 ctx.beginPath();
                 ctx.moveTo(0, i * 70 + this.currentLineInterval);
-                ctx.lineTo(canvasWidth, i * 70 + this.currentLineInterval);
+                ctx.lineTo(this.canvasWidth, i * 70 + this.currentLineInterval);
                 ctx.stroke();
             }
 

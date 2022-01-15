@@ -12,9 +12,9 @@ export class GameTimer extends Entity {
         this.stopped = false;
     }
 
-    var = convertTime = (miliseconds) => {
+    convertTime(miliseconds) {
         // 5/28 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        var totalSeconds = (gameTimeLength / 1000) - Math.floor(miliseconds / 1000);
+        var totalSeconds = (this.game.gameTimeLength / 1000) - Math.floor(miliseconds / 1000);
         // 5/28 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         var minutes = Math.floor(totalSeconds / 60);
         var seconds = totalSeconds - minutes * 60;
@@ -30,7 +30,7 @@ export class GameTimer extends Entity {
         var formattedTime;
         if (!this.stopped) {
             this.time = (Date.now() - this.startTime);
-            formattedTime = convertTime(this.time);
+            formattedTime = this.convertTime(this.time);
             document.getElementById("timer").innerHTML = formattedTime;  //#TODO this should be moved to somewhere else
         }
 

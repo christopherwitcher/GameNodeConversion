@@ -3,13 +3,18 @@
 import { Entity } from './Entity.mjs'
 import { BoundingBox } from './BoundingBox.mjs';
 import { Animation } from './Animation.mjs';
+import { RewindAnimation } from './RewindAnimation.mjs'
 import { Item } from './Item.mjs'
 import { FinishLine } from './FinishLine.mjs'
+import { Enemy } from './Enemy.mjs'
+import { Platform } from './Platform.mjs'
+
+
  
 export class Player extends Entity {
 
     constructor(game, canvasWidth, worldWidth, spriteSheet) {
-        super(game, canvasWidth, worldWidth);
+        super(game, 0, 435);
         this.startingHeight = 435;
         this.rewindStack = [];
         this.jumping = false;
@@ -21,7 +26,6 @@ export class Player extends Entity {
         this.landed = false;
         this.collision = false;
         this.moveDistance = 7;
-        this.direction = true;
 
         this.rightStanding = new Animation(spriteSheet, 12, 6, 100, 150, 0.01, 1, true, false);
         this.leftStanding = new Animation(spriteSheet, 0, 156, 100, 150, 0.01, 1, true, false);
@@ -31,7 +35,7 @@ export class Player extends Entity {
         this.jumpLeft = new Animation(spriteSheet, 10, 485, 114, 158, .015, 89, false);
         this.fallRight = new Animation(spriteSheet, 10146, 336, 114, 160, 0.01, 1, true);
         this.fallLeft = new Animation(spriteSheet, 10146, 496, 114, 148, 0.01, 1, true);
-
+        this.spriteSheet = spriteSheet;
         //stores character's rewindStack
         this.rewinding = false;
         this.lastFrame = null;
@@ -73,7 +77,7 @@ export class Player extends Entity {
             return;
 
         } else if (this.rewindStack.length === 0 && this.rewindCount > 0) {
-            console.log("finish rewind");
+            //console.log("finish rewind");
             ///////////////////////////////////////////////
             var rwSound = document.getElementById('rewindSound');
             rwSound.pause();
@@ -81,7 +85,7 @@ export class Player extends Entity {
             ///////////////////////////////////////////////
             this.x = this.lastFrame.canvasX;
             this.worldX = this.lastFrame.worldX;
-            this.direction = this.lastFrame.direction;
+            window.direction = this.lastFrame.direction;
 
             if (this.lastFrame.currentPlatform != null) {
                 this.currentPlatform = this.lastFrame.currentPlatform;
@@ -111,7 +115,7 @@ export class Player extends Entity {
          * Falling
          */
         if (this.currentPlatform === null && this.y !== this.startingHeight && !this.runningJump && !this.jumping) {
-            console.log("falling");
+            //console.log("falling");
             this.falling = true;
             //var prevY = this.y;
             this.y = this.y + this.moveDistance;
@@ -142,14 +146,14 @@ export class Player extends Entity {
          */
         // !!!!!!!!!!!!Changed to to a else if!!! 5/24/2014
         else if ((this.game.space && (this.game.rightArrow || this.game.leftArrow)) || this.runningJump) {
-            console.log("run and jump");
+            //console.log("run and jump");
             this.runningJump = true;
             this.jumping = false;
             this.running = false;
             this.standing = false;
             var done = false;
 
-            if (this.direction) { // Right
+            if (window.direction) { // Right
 
                 var duration = this.jumpRight.elapsedTime + this.game.clockTick; //the duration of the jump.
                 if (duration > this.jumpRight.totalTime / 2) {
@@ -192,7 +196,7 @@ export class Player extends Entity {
             this.didICollide();
 
             if (this.landed) {
-                if (this.direction) {
+                if (window.direction) {
                     this.jumpRight.elapsedTime = 0;
                     this.x = this.x - this.moveDistance;
                 }
@@ -212,7 +216,7 @@ export class Player extends Entity {
              * Standing and Jumping
              */
         } else if ((this.game.space && this.standing) || this.jumping) {
-            console.log("Standing jump");
+            //console.log("Standing jump");
             this.jumping = true;
             this.runningJump = false;
             this.running = false;
@@ -222,7 +226,7 @@ export class Player extends Entity {
             this.game.rightArrow = false;
             this.game.leftArrow = false;
 
-            if (this.direction) { // Right
+            if (window.direction) { // Right
                 var duration = this.jumpRight.elapsedTime + this.game.clockTick; //the duration of the jump.
                 if (duration > this.jumpRight.totalTime / 2) {
                     duration = this.jumpRight.totalTime - duration;
@@ -268,7 +272,7 @@ export class Player extends Entity {
             }
 
             if (this.landed) {
-                if (this.direction) {
+                if (window.direction) {
                     this.jumpRight.elapsedTime = 0;
                     this.x = this.x - this.moveDistance;
                 }
@@ -290,7 +294,7 @@ export class Player extends Entity {
              * Running Right
              */
         } else if (this.game.rightArrow) {
-            console.log("running right");
+            //console.log("running right");
             this.running = true;
             this.standing = false;
             this.jumping = false;
@@ -309,7 +313,7 @@ export class Player extends Entity {
              * Running Left
              */
         } else if (this.game.leftArrow) {
-            console.log("running left");
+            //console.log("running left");
             this.running = true;
             this.standing = false;
             this.jumping = false;
@@ -328,7 +332,7 @@ export class Player extends Entity {
              * Standing
              */
         } else if (!this.game.leftArrow && !this.game.rightArrow && !this.game.space) {
-            console.log("standing");
+            //console.log("standing");
             this.standing = true;
             this.falling = false;
             this.lastBottom = this.boundingbox.bottom;
@@ -355,7 +359,7 @@ export class Player extends Entity {
         } else {
             this.game.addListeners = true;
         }
-        console.log("update done");
+        //console.log("update done");
 
         Entity.prototype.update.call(this);
     }
@@ -365,7 +369,7 @@ export class Player extends Entity {
     move() {
         var canvasMidpoint = this.canvasWidth / 2;
 
-        if (this.direction) {
+        if (window.direction) {
             if ((this.worldX < canvasMidpoint) || ((this.worldX >= this.worldWidth - canvasMidpoint) &&
                 (this.x + 90 <= this.canvasWidth - this.moveDistance))) {
                 this.x += this.moveDistance;
@@ -416,7 +420,7 @@ export class Player extends Entity {
         //    this.boundingbox = new BoundingBox(this.rewindFrame.x, this.rewindFrame.y,
         //        this.rewindFrame.width, this.rewindFrame.height);
         //}
-        this.direction = this.rewindFrame.direction;
+        window.direction = this.rewindFrame.direction;
         this.falling = this.rewindFrame.falling;
         this.jumping = this.rewindFrame.jumping;
         this.runningJump = this.rewindFrame.runningJump;
@@ -443,7 +447,7 @@ export class Player extends Entity {
             //}
         } else if (this.falling) {
             //fall to the right.
-            if (this.direction) {
+            if (window.direction) {
                 this.fallRight.drawFrame(this.game.clockTick, ctx, this.x, this.y);
                 this.addRewindFrame(this.fallRight.clipX, this.fallRight.clipY,
                     this.fallRight.frameWidth, this.fallRight.frameHeight);
@@ -461,7 +465,7 @@ export class Player extends Entity {
         else if (this.jumping || this.runningJump) {
 
             //jumping to the right.
-            if (this.direction) {
+            if (window.direction) {
                 this.jumpRight.drawFrame(this.game.clockTick, ctx, this.x, this.y);
                 this.addRewindFrame(this.jumpRight.clipX, this.jumpRight.clipY,
                     this.jumpRight.frameWidth, this.jumpRight.frameHeight);
@@ -473,17 +477,18 @@ export class Player extends Entity {
                     this.jumpLeft.frameWidth, this.jumpLeft.frameHeight);
             }
 
-            // Running, can't run in both directions.
+            // Running, can't run in both window.directions.
         } else if (this.running && (this.game.isLeftArrowUp === false || this.game.isRightArrowUp === false)) {
-
-            if (this.direction) {
-
+            
+            if (window.direction) {
+                
                 this.runRight.drawFrame(this.game.clockTick, ctx, this.x, this.y);
                 this.addRewindFrame(this.runRight.clipX, this.runRight.clipY,
                     this.runRight.frameWidth, this.runRight.frameHeight);
 
             } else {
                 this.runLeft.drawFrame(this.game.clockTick, ctx, this.x, this.y);
+                
                 this.addRewindFrame(this.runLeft.clipX, this.runLeft.clipY,
                     this.runLeft.frameWidth, this.runLeft.frameHeight);
             }
@@ -491,7 +496,7 @@ export class Player extends Entity {
             // Standing
         } else {
 
-            if (this.direction) {
+            if (window.direction) {
                 this.rightStanding.drawFrame(this.game.clockTick, ctx, this.x, this.y);
                 this.addRewindFrame(this.rightStanding.clipX, this.rightStanding.clipY, this.rightStanding.frameWidth,
                     this.rightStanding.frameHeight);
@@ -585,7 +590,7 @@ export class Player extends Entity {
     rewindMe() {
         //this.spriteSheet = ;
         this.rewinding = true;
-        this.rewindFrame = new RewindAnimation(spriteSheet, this.rewindStack);
+        this.rewindFrame = new RewindAnimation(this.spriteSheet, this.rewindStack, this.canvasWidth);
         this.draw(this.game.ctx);
     }
     addRewindFrame(clipX, clipY, frameWidth, frameHeight) {
@@ -597,7 +602,7 @@ export class Player extends Entity {
         var current = {
             canvasX: Math.floor(this.x), canvasY: Math.floor(this.y), worldX: Math.floor(this.worldX), worldY: Math.floor(this.worldY),
             clipX: clipX, clipY: clipY,
-            frameWidth: frameWidth, frameHeight: frameHeight, _direction: this.direction ? true : false, get direction() {
+            frameWidth: frameWidth, frameHeight: frameHeight, _direction: window.direction ? true : false, get direction() {
                 return this._direction;
             },
             set direction(value) {

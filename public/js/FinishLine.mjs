@@ -45,28 +45,28 @@ export class FinishLine extends Entity {
         Entity.prototype.update.call(this);
     };
 
-    draw(ctx, game) {
+    draw(ctx) {
         //ctx.fillStyle = "white";
         //ctx.fillRect(this.x, this.y, this.width, this.height);
         //ctx.strokeStyle = "red";
         //ctx.strokeRect(this.boundingBox.x, this.boundingBox.y, this.boundingBox.width, this.boundingBox.height);
         if (this.game.running === true) {
-            this.finishLineDoorOpen.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
+            this.finishLineDoorOpen.drawFrame(this.game.clockTick, ctx, this.x, this.y);
         } else if (this.game.running === false && this.runInsideAnimation.completed === false) {
             var canvasX = this.x + this.boundingBoxOffSetX;
             var canvasY = this.y + this.boundingBoxOffSetY;
-            this.finishLineDoorOpen.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
-            this.runInsideAnimation.drawFrame(this.game.clockTick, this.ctx, this.x + 250,
+            this.finishLineDoorOpen.drawFrame(this.game.clockTick, ctx, this.x, this.y);
+            this.runInsideAnimation.drawFrame(this.game.clockTick, ctx, this.x + 250,
                 this.y + 313);
             this.runUpStairsCompleted = this.runInsideAnimation.completed;
             console.log("running inside");
         } else if (this.game.running === false && this.runUpStairsCompleted === true && this.doorClosed === false) {
-            this.finishLineAnimation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
+            this.finishLineAnimation.drawFrame(this.game.clockTick, ctx, this.x, this.y);
             this.doorClosed = this.finishLineAnimation.completed;
-        } else if (this.game.running === false && !gameOver) {
+        } else if (this.game.running === false && !this.game.gameOver) {
             
             this.game.endGame();
-            gameOver = true;
+            this.game.gameOver = true;
         }
     }
  }

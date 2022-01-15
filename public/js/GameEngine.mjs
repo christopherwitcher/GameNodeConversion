@@ -3,7 +3,7 @@ import { GameTimer } from './GameTimer.mjs'
 import { Player } from './Player.mjs'
 //The game engine.
 export class GameEngine {
-    constructor(canvasWidth, the_spriteSheet) {
+    constructor(canvasWidth, the_spriteSheet,the_finishline) {
         this.entities = [];
         this.ctx = null;
         this.click = null;
@@ -19,20 +19,26 @@ export class GameEngine {
         this.score = 0;
         this.numItems = 0;
         this.running = true;
+        this.finishLine = null;
         this.finishLineCompleted = false;
+        this.finishLine = the_finishline;
         this.runInsideComplete = false;
         this.closeDoorCompleted = false;
         this.startingHeight = 435;
         this.timer;
         this.gameTimeLength = 120000;
+        this.rightArrow = false;
+        this.isRightArrowUp = true;
+        this.leftArrow = false;
+        this.isLeftArrowUp = true;
         this.spriteSheet = the_spriteSheet;
         this.gameOver = false;
         var channel_max = 8; // number of channels
         this.audiochannels = new Array();
-        for (let a = 0; a < channel_max; a++) { // prepare the channels
-            this.audiochannels[a] = new Array();
-            this.audiochannels[a]['channel'] = new Audio(); // create a new audio object
-            this.audiochannels[a]['finished'] = -1; // expected end time for this channel
+        for (let current = 0; current < channel_max; current++) { // prepare the channels
+            this.audiochannels[current] = new Array();
+            this.audiochannels[current]['channel'] = new Audio(); // create a new audio object
+            this.audiochannels[current]['finished'] = -1; // expected end time for this channel
         }
 
         
@@ -62,14 +68,14 @@ export class GameEngine {
     
     playSounds(audioElement) {
 
-        for (a = 0; a < this.audiochannels.length; a++) {
+        for (let current = 0; current < this.audiochannels.length; current++) {
             var now = new Date();
-            if (this.audiochannels[a]['finished'] < now.getTime()) { // is this channel finished?
+            if (this.audiochannels[current]['finished'] < now.getTime()) { // is this channel finished?
 
-                this.audiochannels[a]['finished'] = now.getTime() + audioElement.duration * 1000;
-                this.audiochannels[a]['channel'].src = audioElement.src;
-                this.audiochannels[a]['channel'].load();
-                this.audiochannels[a]['channel'].play();
+                this.audiochannels[current]['finished'] = now.getTime() + audioElement.duration * 1000;
+                this.audiochannels[current]['channel'].src = audioElement.src;
+                this.audiochannels[current]['channel'].load();
+                this.audiochannels[current]['channel'].play();
                 break;
             }
         }
@@ -93,7 +99,7 @@ export class GameEngine {
     startInput() {
         console.log('Starting input');
 
-        var getXandY = function (e) {
+        var getXandY = (e) => {
             var x = e.clientX - that.ctx.canvas.getBoundingClientRect().left;
             var y = e.clientY - that.ctx.canvas.getBoundingClientRect().top + 23; //canvas top is 23 pixels from top
 
@@ -103,8 +109,10 @@ export class GameEngine {
         var that = this;
 
         this.ctx.canvas.addEventListener("click", function (e) {
-            that.click = getXandY(e);
-
+            this.click = getXandY(e)
+        }, false);
+            //that.click = getXandY(e);
+            //that.ctx.canvas.click = ;
             //GetButtonCoordinates();
             //function GetButtonCoordinates() {
             //    var button = document.getElementById("startButton");
@@ -116,10 +124,10 @@ export class GameEngine {
             //        //this.gameEngine.start();
             //    }
             //}
-        }, false);
+        //}
 
         this.ctx.canvas.addEventListener("mousemove", function (e) {
-            that.mouse = getXandY(e);
+            that.ctx.canvas.mouse = getXandY(e);
         }, false);
 
         this.ctx.canvas.addEventListener("mouseleave", function (e) {
@@ -135,13 +143,14 @@ export class GameEngine {
             if (e.keyCode === 39) {
                 that.rightArrow = true;
                 that.isRightArrowUp = false;
-                this.direction = true; // true = right
+                window.direction = true; // true = right
             }
 
-            if (e.keyCode === 37) {s
+            if (e.keyCode === 37) {
                 that.leftArrow = true;
                 that.isLeftArrowUp = false;
-                this.direction = false; // false = left
+                console.log("Left Arrow Pressed");
+                window.direction = false; // false = left
             }
 
             if (e.keyCode === 32) {
@@ -188,7 +197,7 @@ export class GameEngine {
 
             }
         } else {
-            finishLine.draw(this.ctx);
+            this.finishLine.draw(this.ctx);
         }
         if (drawCallback) {
             drawCallback(this);
@@ -250,8 +259,8 @@ export class GameEngine {
         }
     }
     endGame() {
-        timer.stopped = true;
-        var timeLeft = timer.time;
+        window.timer.stopped = true;
+        var timeLeft = window.timer.time;
         // 5/28 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         var timeBonus = Math.ceil((this.gameTimeLength - Number(timeLeft)) / 1000) * 10;
         // 5/28 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -279,10 +288,12 @@ export class GameEngine {
         element2.style.textShadow = "0 0 5px #A5F1FF, 0 0 10px #A5F1FF, 0 0 20px #A5F1FF, 0 0 30px #A5F1FF, 0 0 40px #A5F1FF";
 
         var elem3 = document.createElement('li');
-        elem3.appendChild(document.createTextNode("Score: " + (gameEngine.score + timeBonus)));
+        console.log("Time Bonus: " + timeBonus);
+        console.log("Score " + this.score);
+        elem3.appendChild(document.createTextNode("Score: " + (this.score + timeBonus)));
 
         var elem4 = document.createElement('li');
-        elem4.appendChild(document.createTextNode("Items Collected: " + gameEngine.numItems));
+        elem4.appendChild(document.createTextNode("Items Collected: " + this.numItems));
 
         var elem5 = document.createElement('li');
         elem5.appendChild(document.createTextNode("Time Bonus: " + timeBonus));
@@ -313,6 +324,7 @@ export class GameEngine {
         document.getElementById('rewindSound').pause();
         // 5/28 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
+
 }
 
 

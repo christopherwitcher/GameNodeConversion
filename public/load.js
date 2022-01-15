@@ -6,26 +6,27 @@ import { spacerSection, endLevelSection, buildMovingPlatform, rectPlatform, buil
 import { GameEngine } from './js/GameEngine.mjs';
 import { GameTimer } from './js/GameTimer.mjs';
 
-//const socket = io("https://sibling-engine.azurewebsites.net");
-const socket = io("http://localhost:8080");
+const socket = io("https://sibling-engine.azurewebsites.net");
+//const socket = io("http://localhost:8080");
 const ASSET_MANAGER = new AssetManager();
 var socketId = null;
+var direction = true;
 let heroSpriteSheet = '../runboySprite.png';
 heroSpriteSheet = "runboySprite.png";
-var direction = true;
-var screenOffSet = 0;
-var backImg = "neighBackgroundext.png";
+//var direction = true;
+//ar screenOffSet = 0;
+//var backImg = "neighBackgroundext.png";
 var gameEngine;
 var canvasWidth;
 var canvasHeight;
 var boardPieces = [];
-var rewindFrame;
+//var rewindFrame;
 var finishLine;
 var sdParentNode = null;
 var startDisplay = null;
 var timer;
-var gameOver = false;
-var gameTimeLength = 120000;
+//var gameOver = false;
+//var gameTimeLength = 120000;
 
 
 ASSET_MANAGER.queueDownload(heroSpriteSheet);
@@ -63,31 +64,34 @@ window.onload = () => {
         canvas.focus();
         var ctx = canvas.getContext('2d');
         let gameWorld = { width: 21000, height: canvasHeight };
-        gameEngine = new GameEngine(canvasWidth,ASSET_MANAGER.getAsset(heroSpriteSheet));
-        finishLine = new FinishLine(gameEngine, gameWorld.width, ctx, ASSET_MANAGER.getAsset(heroSpriteSheet));
-        var the_player = new Player(gameEngine, canvasWidth, gameWorld.width, ASSET_MANAGER.getAsset(heroSpriteSheet));
-        boardPieces = getBoardPieces(gameEngine, nextWidth)
+        
+        window.gameEngine = new GameEngine(canvasWidth,ASSET_MANAGER.getAsset(heroSpriteSheet));
+        var finishLine = new FinishLine(window.gameEngine, gameWorld.width, ctx, ASSET_MANAGER.getAsset(heroSpriteSheet));
+        window.gameEngine.finishLine = finishLine;
+        var the_player = new Player(window.gameEngine, canvasWidth, gameWorld.width, ASSET_MANAGER.getAsset(heroSpriteSheet));
+        
         var nextWidth = 900;
+        boardPieces = getBoardPieces(window.gameEngine, nextWidth)
         for (let i = 0; i < boardPieces.length; i++) {
             
-            nextWidth = boardPieces[i](nextWidth, gameEngine, true);
+            nextWidth = boardPieces[i](nextWidth, window.gameEngine, true);
             nextWidth += 500;
         }
 
-        nextWidth = boardPieces[0](nextWidth, gameEngine, true);
+        nextWidth = boardPieces[0](nextWidth, window.gameEngine, true);
         nextWidth += 500;
-        spacerSection(gameEngine, nextWidth, 400, 10, 2);
+        spacerSection(window.gameEngine, nextWidth, 400, 10, 2);
         nextWidth = nextWidth + 500;
-        var sect = endLevelSection(nextWidth, gameEngine);
+        var sect = endLevelSection(nextWidth, window.gameEngine);
         //nextWidth = nextWidth + sect;
-        buildGround(gameEngine, gameWorld.width);
-        gameEngine.addEntity(finishLine);
-        gameEngine.addEntity(the_player);
+        buildGround(window.gameEngine, gameWorld.width);
+        window.gameEngine.addEntity(finishLine);
+        window.gameEngine.addEntity(the_player);
         
         var viewPort = new Viewport(the_player, canvasWidth, canvas.height, gameWorld.width, gameWorld.height);
-        gameEngine.setViewPort(viewPort);
+        window.gameEngine.setViewPort(viewPort);
 
-        gameEngine.init(ctx);
+        window.gameEngine.init(ctx);
         let sender = { firstName: "Christopher", lastName: "Witcher" };
         //.onclick = startGame();
         socket.emit('initialize', sender);
@@ -106,10 +110,10 @@ startButton.addEventListener('click', (e) =>{
             startDisplay = document.getElementById("startDisplay");
             sdParentNode.removeChild(startDisplay);
         }
-        gameEngine.start();
-        gameEngine.ctx.canvas.focus();
-        timer = new GameTimer(gameEngine);
-        gameEngine.addEntity(timer);
+        window.gameEngine.start();
+        window.gameEngine.ctx.canvas.focus();
+        window.timer = new GameTimer(window.gameEngine);
+        window.gameEngine.addEntity(window.timer);
         socket.emit('chat message', "Start Button Clicked");
     }
 })
