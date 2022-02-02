@@ -1,4 +1,4 @@
-import { Animation } from '../modules/engine/Animation.mjs';
+import { Animation } from 'witcher-game-animation';
 import * as assert from 'assert';
 
 describe('Animation is Done', () => {
