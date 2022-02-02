@@ -1,4 +1,4 @@
-/* import { Animation } from '../modules/Characters/Player.mjs';
+/* import { Animation } from '../public/js/Player.mjs';
 import * as assert from 'assert';
 
 describe('Player is Done', () => {
