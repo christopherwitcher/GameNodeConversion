@@ -1,4 +1,4 @@
-import { BoundingBox } from '../modules/engine/BoundingBox.mjs';
+import { BoundingBox } from '../public/js/BoundingBox.mjs';
 import * as assert from 'assert';
 
 describe('BoundingBox Initialized', () => {
