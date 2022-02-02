@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
   res.sendFile(homepage);
 });
 
-
+/*
 io.on('connection', (socket) => {
     console.log('My Socket' + socket.id);
   socket.on('chat message', (msg) => {
@@ -34,7 +34,7 @@ io.on('connection', (socket) => {
         io.to(socket.id).emit('initialize', body);
     })
   });
-
+*/
 
 server.listen(port, () => {
   console.log('I Am the Socket Window listening on *:' + port);
